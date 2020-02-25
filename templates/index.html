@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+</head>
+<body>
+    <h1>My awesome shop admin</h1>
+    <ul>
+        {% for name, price in products %}
+        <li>{{name}} - {{price}} UAH</li>
+        {% endfor %}
+    </ul>
+    <form action="/create-item">
+        <input type="text" name="item_name">
+        <input type="text" name="item_price">
+        <input type="submit">
+    </form>
+</body>
+</html>

@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}
-    Register
+    Login
 {% endblock %}
 {% block body %}
-    <h1>Register</h1>
+    <h1>Login</h1>
     {{ request.cookies }}
     {% if msg %}
     <p style="color: red;">{{msg}}</p>
     {% endif %}
-    <form action="/register" method="post">
+    <form action="/login" method="post">
         <input type="text" name="user">
         <input type="password" name="password">
         <input type="submit">

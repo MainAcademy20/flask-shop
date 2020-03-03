@@ -55,7 +55,6 @@ def index():
         return redirect(url_for('login'))
     items = get_all_products()
     return render_template('index.html', products=items)
-    # return render_template('unauthorized.html')
 
 
 @app.route('/create-item')

@@ -3,8 +3,8 @@
     Product List
 {% endblock %}
 {% block body %}
-{# }<a href="{{ url_for('logout') }}">Logout</a> #}
-    {{ current_user }}
+<a href="{{ url_for('logout') }}">Logout</a>
+    Hello, {{ current_user.username or 'stranger' }}
     <h1>My awesome shop admin</h1>
     <ul>
         {% for p in products %}

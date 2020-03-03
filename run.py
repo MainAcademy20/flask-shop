@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, Response
-from flask_login import LoginManager, AnonymousUserMixin, current_user, login_user
+from flask_login import LoginManager, AnonymousUserMixin, current_user, login_user, logout_user, login_required
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from controllers import get_all_products, insert_item, exists_user
 from models import User
@@ -8,6 +9,7 @@ app = Flask('shop-app')
 
 
 def app_init(a):
+    a.config['SECRET_KEY'] = 'asdgasdfasdfasdfasdfSDGDGADSFGAFDG'
     login_manager = LoginManager()
     login_manager.init_app(app)
 
@@ -17,22 +19,11 @@ def app_init(a):
 
     return a
 
-#
-# @app.route('/register', methods=['GET', 'POST'])
-# def register():
-#     if request.method == 'POST':
-#         user, password = request.form['user'], request.form['password']
-#         if exists_user(user):
-#             return render_template('register.html', msg='Username already taken')
-#
-#         register_user(user, password)
-#         return Response(status=302, headers={
-#             'Location': url_for('index'),
-#             'Set-Cookie': 'username={}'.format(user)
-#         })
-#         return redirect(url_for('index'))
 
-    # return render_template('register.html')
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -41,8 +32,16 @@ def login():
     if request.method == 'POST':
         user, passw = request.form.get('username'), request.form.get('password')
         if u.is_anonymous:
-            new_u = User.create(username=user, password=passw)
+            new_u = User.get_or_none(username=user)
+            if new_u:
+                if check_password_hash(new_u.password, passw):
+                    login_user(new_u)
+                    return redirect(url_for('index'))
+                else:
+                    return render_template('login.html', msg='Invalid password')
+            new_u = User.create(username=user, password=generate_password_hash(passw))
             login_user(new_u)
+
         return redirect(url_for('index'))
     if u.is_authenticated:
         return redirect(url_for('index'))
@@ -52,7 +51,8 @@ def login():
 
 @app.route('/')
 def index():
-    # if exists_user(username):/
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
     items = get_all_products()
     return render_template('index.html', products=items)
     # return render_template('unauthorized.html')

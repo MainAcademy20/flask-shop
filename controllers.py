@@ -11,6 +11,3 @@ def get_all_products():
 def insert_item(item_name, item_price):
     Product.create(name=item_name, price=item_price)
 
-
-def exists_user(user):
-    return bool(User.get_or_none(username=user))

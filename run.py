@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, Response
-from flask_login import LoginManager, AnonymousUserMixin, current_user, login_user, logout_user, login_required
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import LoginManager, current_user, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from controllers import get_all_products, insert_item, exists_user
+from controllers import get_all_products, insert_item
 from models import User
 
 app = Flask('shop-app')
